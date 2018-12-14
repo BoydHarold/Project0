@@ -1,0 +1,25 @@
+Banking App Part 1
+
+Project Requirements:
+1. A customer should be able to register with a username and password.
+2. A customer should be able to apply to open an account or a joint account.
+3. A customer should be able to withdraw, deposit, and transfer funds between accounts.
+4. Employees of the bank should be able to view all of their customers information, including:
+Account information
+Account balances
+Personal information
+5. Employees should be able to appove/deny open applications for accounts.
+6. Bank admins should be able to view and edit all accounts, including:
+Approving/denying accounts
+withdrawing, depositing, transferring from all accounts
+cancelling accounts
+7. All transactions should be logged
+
+Java Requirements:
+1. All interaction with the user should be done throught he console using the Scanner class
+2. 100% test coverage is expected using JUnit (TDD)
+3. Logging should be accomplished using Log4J
+4. The application must be built using Java 8
+5. All basic validation should be done, such as trying to input negative amounts, overdrawing from accounts etc.
+6. All information should be persisted using text files and serialization
+
