@@ -18,7 +18,63 @@ public class Customer {
 	private String emailAddress;
 	private String phoneNumber;
 	private int customerId;
+	private int customerIsActive;
+	private String customerPath = "C:\\Users\\boydt\\eclipse-workspace\\BankingApp\\PseudoDB\\PseudoTables\\Customer\\";
+	private File customerIdFile = new File(customerPath + "CustomerId.txt");
+	private File customerFirstNameFile = new File(customerPath + "CustomerFirstName.txt");
+	private File customerLastNameFile = new File(customerPath + "CustomerLastName.txt");
+	private File customerAddressFile = new File(customerPath + "CustomerAddress.txt");
+	private File customerBirthDateFile = new File(customerPath + "CustomerBirthDate.txt");
+	private File customerEmailAddressFile = new File(customerPath + "CustomerEmailAddress.txt");
+	private File customerPhoneNumberFile = new File(customerPath + "CustomerPhoneNumber.txt");
+	private File customerIsActiveFile = new File(customerPath + "CustomerIsActive.txt");
+	
+	public void makeBaselineCustomer() {
+		boolean exists = customerIdFile.exists();
+		if(!exists) {
+			try (
+					FileOutputStream fosCustomerId = new FileOutputStream(customerIdFile, true);
+					PrintStream psCustomerId = new PrintStream(fosCustomerId);
 
+					FileOutputStream fosCustomerFirstName = new FileOutputStream(customerFirstNameFile, true);
+					PrintStream psCustomerFirstName = new PrintStream(fosCustomerFirstName);
+					
+					FileOutputStream fosCustomerLastName = new FileOutputStream(customerLastNameFile, true);
+					PrintStream psCustomerLastName = new PrintStream(fosCustomerLastName);
+					
+					FileOutputStream fosCustomerAddress = new FileOutputStream(customerAddressFile, true);
+					PrintStream psCustomerAddress = new PrintStream(fosCustomerAddress);
+					
+					FileOutputStream fosCustomerBirthDate = new FileOutputStream(customerBirthDateFile, true);
+					PrintStream psCustomerBirthDate = new PrintStream(fosCustomerBirthDate);
+					
+					FileOutputStream fosCustomerEmailAddress = new FileOutputStream(customerEmailAddressFile, true);
+					PrintStream psCustomerEmailAddress = new PrintStream(fosCustomerEmailAddress);
+					
+					FileOutputStream fosCustomerPhoneNumber = new FileOutputStream(customerPhoneNumberFile, true);
+					PrintStream psCustomerPhoneNumber = new PrintStream(fosCustomerPhoneNumber);
+					
+					FileOutputStream fosCustomerIsActive = new FileOutputStream(customerIsActiveFile, true);
+					PrintStream psCustomerIsActive = new PrintStream(fosCustomerIsActive);) {
+				
+				psCustomerId.println("0");
+				psCustomerFirstName.println("0");
+				psCustomerLastName.println("0");
+				psCustomerAddress.println("0");
+				psCustomerBirthDate.println("0");
+				psCustomerEmailAddress.println("0");
+				psCustomerPhoneNumber.println("0");
+				psCustomerIsActive.println("0");
+				
+			} catch (FileNotFoundException e) {
+
+			} catch (IOException e) {
+
+			}
+		}
+		
+	}
+	
 	public void setCustomerFirstName(String name) {
 		this.firstName = name;
 	}
@@ -44,42 +100,68 @@ public class Customer {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public void setCustomerId() {
-		this.customerId = 3;
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
+	}
+	
+	public void setCustomerIsActive(int customerIsActive) {
+		this.customerIsActive = customerIsActive;
 	}
 
-	public String getCustomerFirstName(int customerId) {
+	public String getCustomerFirstName() {
 		return this.firstName;
 	}
 
-	public String getCustomerLastName(int customerId) {
+	public String getCustomerLastName() {
 		return this.lastName;
 	}
 
-	public String getCustomerAddress(int customerId) {
+	public String getCustomerAddress() {
 		return this.address;
 	}
 
-	public String getCustomerBirthDate(int customerId) {
+	public String getCustomerBirthDate() {
 		return this.birthDate;
 	}
 
-	public String getCustomerEmailAddress(int customerId) {
+	public String getCustomerEmailAddress() {
 		return this.emailAddress;
 	}
 
-	public String getCustomerPhoneNumber(int customerId) {
+	public String getCustomerPhoneNumber() {
 		return this.phoneNumber;
+	}
+	
+	public int getCustomerIsActive() {
+		return this.customerIsActive;
+	}
+	
+	public int generateCustomerId() {
+		int newId = 0;
+		
+		try (
+				FileInputStream fisCustomerId = new FileInputStream(customerIdFile);
+				BufferedReader brCustomerId = new BufferedReader(new InputStreamReader(fisCustomerId));
+		)
+		{
+			String lastId = "";
+			String currentId = "";
+			while((currentId = brCustomerId.readLine()) != null) {
+				lastId = currentId;
+			}
+			
+			newId = Integer.parseInt(lastId) + 1;
+			
+		} catch (FileNotFoundException e) {
+
+		} catch (IOException e) {
+			
+		}
+		
+		return newId;
 	}
 
 	public void commitCustomer() {
-		File customerIdFile = new File("CustomerId.txt");
-		File customerFirstNameFile = new File("CustomerFirstName.txt");
-		File customerLastNameFile = new File("CustomerLastName.txt");
-		File customerAddressFile = new File("CustomerAddress.txt");
-		File customerBirthDateFile = new File("CustomerBirthDate.txt");
-		File customerEmailAddressFile = new File("CustomerEmailAddress.txt");
-		File customerPhoneNumberFile = new File("CustomerPhoneNumber.txt");
 		try (
 				FileOutputStream fosCustomerId = new FileOutputStream(customerIdFile, true);
 				PrintStream psCustomerId = new PrintStream(fosCustomerId);
@@ -100,8 +182,12 @@ public class Customer {
 				PrintStream psCustomerEmailAddress = new PrintStream(fosCustomerEmailAddress);
 				
 				FileOutputStream fosCustomerPhoneNumber = new FileOutputStream(customerPhoneNumberFile, true);
-				PrintStream psCustomerPhoneNumber = new PrintStream(fosCustomerPhoneNumber);) {
+				PrintStream psCustomerPhoneNumber = new PrintStream(fosCustomerPhoneNumber);
+				
+				FileOutputStream fosCustomerIsActive = new FileOutputStream(customerIsActiveFile, true);
+				PrintStream psCustomerIsActive = new PrintStream(fosCustomerIsActive);) {
 			
+			this.customerId = generateCustomerId();
 			psCustomerId.println(String.valueOf(customerId));
 			psCustomerFirstName.println(firstName);
 			psCustomerLastName.println(lastName);
@@ -109,6 +195,7 @@ public class Customer {
 			psCustomerBirthDate.println(birthDate);
 			psCustomerEmailAddress.println(emailAddress);
 			psCustomerPhoneNumber.println(phoneNumber);
+			psCustomerIsActive.println("1");
 
 		} catch (FileNotFoundException e) {
 
@@ -118,16 +205,7 @@ public class Customer {
 	}
 
 	public void getCommittedCustomerInformation(int customerId) {
-		File customerFirstNameFile = new File("CustomerFirstName.txt");
-		File customerLastNameFile = new File("CustomerLastName.txt");
-		File customerAddressFile = new File("CustomerAddress.txt");
-		File customerBirthDateFile = new File("CustomerBirthDate.txt");
-		File customerEmailAddressFile = new File("CustomerEmailAddress.txt");
-		File customerPhoneNumberFile = new File("CustomerPhoneNumber.txt");
-		
 		this.customerId = customerId;
-		
-		int index = customerId - 1;
 		
 		try (
 				
@@ -148,6 +226,9 @@ public class Customer {
 				
             	FileInputStream fisCustomerPhoneNumber = new FileInputStream(customerPhoneNumberFile);
 				BufferedReader brCustomerPhoneNumber = new BufferedReader(new InputStreamReader(fisCustomerPhoneNumber));
+				
+            	FileInputStream fisCustomerIsActive = new FileInputStream(customerIsActiveFile);
+				BufferedReader brCustomerIsActive = new BufferedReader(new InputStreamReader(fisCustomerIsActive));
 			){
 			
 			ArrayList<String> list = new ArrayList<>();
@@ -157,7 +238,7 @@ public class Customer {
                 line = brCustomerFirstName.readLine();
             }  
             
-            this.firstName = list.get(index);
+            this.firstName = list.get(customerId);
             
             line = brCustomerLastName.readLine();
         	list.clear();
@@ -166,7 +247,7 @@ public class Customer {
                 line = brCustomerLastName.readLine();
             }  
             
-            this.lastName = list.get(index);
+            this.lastName = list.get(customerId);
             
             line = brCustomerAddress.readLine();
         	list.clear();
@@ -175,7 +256,7 @@ public class Customer {
                 line = brCustomerAddress.readLine();
             }  
             
-            this.address = list.get(index);
+            this.address = list.get(customerId);
             
             line = brCustomerBirthDate.readLine();
         	list.clear();
@@ -184,7 +265,7 @@ public class Customer {
                 line = brCustomerBirthDate.readLine();
             }  
             
-            this.birthDate = list.get(index);
+            this.birthDate = list.get(customerId);
             
             line = brCustomerEmailAddress.readLine();
         	list.clear();
@@ -193,7 +274,7 @@ public class Customer {
                 line = brCustomerEmailAddress.readLine();
             }  
             
-            this.emailAddress = list.get(index);
+            this.emailAddress = list.get(customerId);
             
             line = brCustomerPhoneNumber.readLine();
         	list.clear();
@@ -202,7 +283,16 @@ public class Customer {
                 line = brCustomerPhoneNumber.readLine();
             }  
             
-            this.phoneNumber = list.get(index);
+            this.phoneNumber = list.get(customerId);
+            
+            line = brCustomerIsActive.readLine();
+        	list.clear();
+            while(line != null){
+            	list.add(line);
+                line = brCustomerIsActive.readLine();
+            }  
+            
+            this.customerIsActive = Integer.parseInt(list.get(customerId));
             	
     		} catch (FileNotFoundException e) {
 
@@ -210,5 +300,9 @@ public class Customer {
     			
     		}
 	}
+
+
+	
+	
 
 }

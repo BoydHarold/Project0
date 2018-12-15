@@ -1,3 +1,0 @@
-John.Smith@revature.com
-Asheley.Smith@revature.com
-Tom.Skirk@revature.com
